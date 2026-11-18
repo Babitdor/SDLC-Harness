@@ -1,0 +1,116 @@
+{
+  "suite": "dataset/eval_dataset/MBSEEvals",
+  "trials": 1,
+  "tasks": [
+    {
+      "task": "Task-23",
+      "project_id": "task23-ev-charging-point",
+      "trials": [
+        {
+          "trial": 0,
+          "thread_id": "task23-ev-charging-point-t0-78f5ef93",
+          "elapsed_s": 419.8,
+          "pipeline_error": null,
+          "graders": {
+            "requirements-quality": {
+              "score": 0.91,
+              "comment": "LLM: verifiability=0.95, unambiguity=0.85, singularity=0.40, active_voice=0.90, necessity=1.00"
+            },
+            "rules-quality": {
+              "score": 0.8,
+              "comment": "**Assessment**\n\n- **Atomicity:** Most rules are single constraints, but several are compound: C6/R-C6 combine derate and trip thresholds; R-S8 combines IP54 and IK08; R-R1 combines frequency, voltage, and duty-cycle mapping; R-R5 combines locking and release; R-R8 combines temperature and humidity; R-R10 combines signing, OTA, backend initiation, and rollback. These should be split into separate rules.\n- **Measurability:** The majority of hard constraints and derived rules are quantified with clear thresholds and units (e.g., 32 A, 400 V \u00b110 %, 6 mA, 70 \u00b0C/90 \u00b0C, 5 W, 5 m, 100 ms, 99 %). Standards-based rules (R-S1\u2026R-S8) are verifiable via conformance tests but rely on external standards rather than self-contained numeric thresholds. R-S7 is optional/conditional, reducing its firmness.\n- **Traceability:** Excellent. Every rule has an explicit source tag (C1\u2013C8, R-xx, or a named standard), and the requirements document provides corresponding REQ IDs.\n\nOverall, the rule set is well-struc"
+            },
+            "sysml-validity": {
+              "score": 1,
+              "comment": "All 2 .sysml files passed validation (zero errors)."
+            },
+            "sysml-semantic-quality": {
+              "score": 0.8,
+              "comment": "SCORE: 0.8"
+            },
+            "defect-density": {
+              "score": 1.0,
+              "comment": "Defect density: 0 error(s) / 167 elements = 0.00 per 100 (score reaches 0 at 10/100)."
+            },
+            "cost-tokens": {
+              "score": 1.0,
+              "comment": "total=1347330 (in=1280846, out=66484); cost=$0.3257; calls=76; model=deepseek-v4-flash; max_in/call=33485",
+              "extra": {
+                "usage": {
+                  "input_tokens": 1280846,
+                  "output_tokens": 66484,
+                  "total_tokens": 1347330,
+                  "cached_tokens": 0,
+                  "calls": 76,
+                  "model": "deepseek-v4-flash",
+                  "max_input_tokens_per_call": 33485,
+                  "p95_input_tokens_per_call": 29269
+                },
+                "cost_usd": 0.325666,
+                "input_price": 0.22,
+                "output_price": 0.66,
+                "used_fallback_price": false,
+                "budget": {
+                  "max_cost_usd": 1.0,
+                  "max_total_tokens": 1500000
+                },
+                "elapsed_s": 390.81
+              }
+            },
+            "process-metrics": {
+              "score": 1.0,
+              "comment": "llm_invocations=76; subagents=6 (5 kinds); reasoning_tokens=0; elapsed=390.8s; model=deepseek-v4-flash",
+              "extra": {
+                "usage": {
+                  "input_tokens": 1280846,
+                  "output_tokens": 66484,
+                  "total_tokens": 1347330,
+                  "reasoning_tokens": 0,
+                  "calls": 76,
+                  "invocations": 76,
+                  "model": "deepseek-v4-flash"
+                },
+                "process": {
+                  "subagent_calls": {
+                    "ingestion": 1,
+                    "requirements": 1,
+                    "functional": 1,
+                    "logical": 1,
+                    "sysml": 2
+                  },
+                  "agents_involved": [
+                    "functional",
+                    "ingestion",
+                    "logical",
+                    "requirements",
+                    "sysml"
+                  ],
+                  "llm_invocations": 76,
+                  "elapsed_s": 390.81
+                },
+                "budget": {
+                  "max_llm_invocations": 200,
+                  "max_subagents": 30,
+                  "max_elapsed_s": 1800.0
+                }
+              }
+            }
+          }
+        }
+      ],
+      "mean_scores": {
+        "requirements-quality": 0.91,
+        "rules-quality": 0.8,
+        "sysml-validity": 1.0,
+        "sysml-semantic-quality": 0.8,
+        "defect-density": 1.0,
+        "cost-tokens": 1.0,
+        "process-metrics": 1.0
+      }
+    }
+  ],
+  "summary": {
+    "tasks": 1,
+    "overall_mean_score": 0.93
+  }
+}

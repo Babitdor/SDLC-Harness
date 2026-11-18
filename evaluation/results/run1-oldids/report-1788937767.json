@@ -1,0 +1,167 @@
+{
+  "suite": "dataset/eval_dataset/MBSEEvals",
+  "trials": 1,
+  "tasks": [
+    {
+      "task": "Task-24",
+      "project_id": "task24-hydrogen-station",
+      "trials": [
+        {
+          "trial": 0,
+          "thread_id": "task24-hydrogen-station-t0-95e063e2",
+          "elapsed_s": 1503.4,
+          "pipeline_error": null,
+          "graders": {
+            "requirements-quality": {
+              "score": 0.855,
+              "comment": "LLM: verifiability=0.95, unambiguity=0.60, singularity=0.30, active_voice=0.70, necessity=1.00"
+            },
+            "box-quality": {
+              "score": 0.6,
+              "comment": "The morphological box is well-structured with a clear function-by-option matrix, and each function has at least two distinct, plausible alternatives. The known incompatibilities are explicitly listed, which supports internal consistency checks. However, the box explicitly states \"no option selected\" and does not provide a coherent concept across the rows. This is a critical omission per the evaluation criteria, which require a single selected option per function and internal consistency. Therefore, the concept criterion is not met, and the overall score must reflect this deficiency.\n\nSCORE: 0.6"
+            },
+            "rules-quality": {
+              "score": 0.76,
+              "comment": "SCORE: 0.76"
+            },
+            "use-case-quality": {
+              "score": 0,
+              "comment": "USECASES.md produced but no ## UC-NNN: use cases could be parsed"
+            },
+            "activity-quality": {
+              "score": 0.6235,
+              "comment": "det=0.55 llm=0.70 over 13 activities. ACT-001 \u2014 Establish H70 Communications Fill (UC-001): related requirements failed; ACT-001 \u2014 Establish H70 Communications Fill (UC-001): preconditions failed; ACT-001 \u2014 Establish H70 Communications Fill (UC-001): postconditions failed; ACT-001 \u2014 Establish H70 Communications Fill (UC-001): steps >= 2 failed; ACT-002 \u2014 Establish H70 Table-Based Fallback Fill (UC-002): related requirements failed; ACT-002 \u2014 Establish H70 Table-Based Fallback Fill (UC-002): preconditions failed; ACT-002 \u2014 Establish H70 Table-Based Fallback Fill (UC-002): postconditions failed; ACT-002 \u2014 Establish H70 Table-Based Fallback Fill (UC-002): steps >= 2 failed (+46 more)"
+            },
+            "function-tree-quality": {
+              "score": 0.55,
+              "comment": "det=0.75 llm=0.35 86 nodes, depth 4. only 0% of requirements (REQ-*) map to a function"
+            },
+            "principle-solutions-quality": {
+              "score": 0.8,
+              "comment": "The principle solutions document is well-structured and internally consistent for the F1\u2013F8 morphological functions. All selected options in the recommended concept CS-001 exist in the morphological box, and the candidate combinations respect the stated incompatibilities. The constraint trace is thorough, and the trade-space discussion is honest.\n\nHowever, completeness is not perfect. The function tree includes two Level 1 functions that are not addressed by a chosen principle solution:\n\n- **Emergency Shutdown** (manual ESD, flame-detection interlocked shutdown, isolation, venting within 10 s)\n- **Support Maintenance** (skid removal, service/calibration, return to service)\n\nThe document references ESD interlocking and skid removability in rationale, but it does not select a principle solution for these functions, and the morphological box itself lacks options for them. This is an upstream gap, but it still means not every function in the function tree has a mapped principle solution.\n\n"
+            },
+            "sysml-validity": {
+              "score": 1,
+              "comment": "All 5 .sysml files passed validation (zero errors)."
+            },
+            "sysml-semantic-quality": {
+              "score": 0.5,
+              "comment": "SCORE: 0.5"
+            },
+            "defect-density": {
+              "score": 1.0,
+              "comment": "Defect density: 0 error(s) / 655 elements = 0.00 per 100 (score reaches 0 at 10/100)."
+            },
+            "sysml-cross-model-consistency": {
+              "score": 1.0,
+              "comment": "Analysis:\n- **Block coverage**: All blocks/subsystems in BDD.md appear in bdd.sysml, with no missing or invented blocks. Naming differences are only case/style.\n- **Connection coverage**: All internal connections/flows in IBD.md are reflected in ibd.sysml between the corresponding parts. The external vent discharge is represented by a port/comment rather than a connect to an external part, which is acceptable for an internal block diagram.\n- **Structural fidelity**: The composition hierarchy in bdd.sysml matches BDD.md, and the subsystem/part structure used in ibd.sysml is consistent with the IBD connections.\n\nMinor property-level representation differences exist (e.g., array properties split into scalar attributes, some string values slightly shortened), but these do not affect the three scored dimensions.\n\nSCORE: 1.0"
+            },
+            "layout-validity": {
+              "score": 1,
+              "comment": "All layout and floorplan artifacts are valid: layout_v1.json is well-formed, zones fit the envelope with no overlaps; floorplan.drawio is valid XML with cells."
+            },
+            "traceability-chain": {
+              "score": 0,
+              "comment": "Traceability violations: Traceability: use case 'UC-001' does not reference any requirement ID; Traceability: use case 'UC-002' does not reference any requirement ID; Traceability: use case 'UC-003' does not reference any requirement ID; Traceability: use case 'UC-004' does not reference any requirement ID; Traceability: use case 'UC-005' does not reference any requirement ID; Traceability: use case 'UC-006' does not reference any requirement ID; Traceability: use case 'UC-007' does not reference any requirement ID; Traceability: use case 'UC-008' does not reference any requirement ID; Traceability: use case 'UC-009' does not reference any requirement ID; Traceability: use case 'UC-010' does not reference any requirement ID (and 7 more)"
+            },
+            "orphan-element-ratio": {
+              "score": 1.0,
+              "comment": "Connectivity 100%: all 36 blocks are used, composed, or connected."
+            },
+            "cost-tokens": {
+              "score": 0.3682,
+              "comment": "total=4073578 (in=3894213, out=179365); cost=$0.9751; calls=157; model=deepseek-v4-flash; max_in/call=54071; OVER BUDGET",
+              "extra": {
+                "usage": {
+                  "input_tokens": 3894213,
+                  "output_tokens": 179365,
+                  "total_tokens": 4073578,
+                  "cached_tokens": 0,
+                  "calls": 157,
+                  "model": "deepseek-v4-flash",
+                  "max_input_tokens_per_call": 54071,
+                  "p95_input_tokens_per_call": 42243
+                },
+                "cost_usd": 0.975108,
+                "input_price": 0.22,
+                "output_price": 0.66,
+                "used_fallback_price": false,
+                "budget": {
+                  "max_cost_usd": 1.0,
+                  "max_total_tokens": 1500000
+                },
+                "elapsed_s": 1471.54
+              }
+            },
+            "process-metrics": {
+              "score": 1.0,
+              "comment": "llm_invocations=157; subagents=12 (8 kinds); reasoning_tokens=0; elapsed=1471.5s; model=deepseek-v4-flash",
+              "extra": {
+                "usage": {
+                  "input_tokens": 3894213,
+                  "output_tokens": 179365,
+                  "total_tokens": 4073578,
+                  "reasoning_tokens": 0,
+                  "calls": 157,
+                  "invocations": 157,
+                  "model": "deepseek-v4-flash"
+                },
+                "process": {
+                  "subagent_calls": {
+                    "ingestion": 1,
+                    "requirements": 1,
+                    "functional": 1,
+                    "logical": 1,
+                    "sysml": 5,
+                    "sankey": 1,
+                    "optimization": 1,
+                    "floorplan": 1
+                  },
+                  "agents_involved": [
+                    "floorplan",
+                    "functional",
+                    "ingestion",
+                    "logical",
+                    "optimization",
+                    "requirements",
+                    "sankey",
+                    "sysml"
+                  ],
+                  "llm_invocations": 157,
+                  "elapsed_s": 1471.54
+                },
+                "budget": {
+                  "max_llm_invocations": 200,
+                  "max_subagents": 30,
+                  "max_elapsed_s": 1800.0
+                }
+              }
+            }
+          }
+        }
+      ],
+      "mean_scores": {
+        "requirements-quality": 0.855,
+        "box-quality": 0.6,
+        "rules-quality": 0.76,
+        "use-case-quality": 0.0,
+        "activity-quality": 0.6235,
+        "function-tree-quality": 0.55,
+        "principle-solutions-quality": 0.8,
+        "sysml-validity": 1.0,
+        "sysml-semantic-quality": 0.5,
+        "defect-density": 1.0,
+        "sysml-cross-model-consistency": 1.0,
+        "layout-validity": 1.0,
+        "traceability-chain": 0.0,
+        "orphan-element-ratio": 1.0,
+        "cost-tokens": 0.3682,
+        "process-metrics": 1.0
+      }
+    }
+  ],
+  "summary": {
+    "tasks": 1,
+    "overall_mean_score": 0.691
+  }
+}

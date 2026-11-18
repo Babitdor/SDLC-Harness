@@ -1,0 +1,37 @@
+[project]
+name = "harness-eval"
+version = "0.1.0"
+description = "Evaluation and ablation harness for the SDLC multi-agent pipeline (LangSmith-based)"
+requires-python = ">=3.11"
+dependencies = [
+    # The evaluation runs the *real* pipeline, so it depends on the backend
+    # package. Resolved as an editable path dependency below.
+    "sdlc-harness",
+    "rich>=13.0",
+]
+
+# Backend lives one directory over; install it editable so evaluators always
+# exercise the current source (sdlc.services / sdlc.core / sdlc.tools / sdlc.sandbox).
+[tool.uv.sources]
+sdlc-harness = { path = "../backend", editable = true }
+
+[build-system]
+requires = ["setuptools>=69.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+# Ship the bundled ground-truth / evaluator docs alongside the .py files.
+harness_eval = ["**/*.md"]
+
+[dependency-groups]
+dev = [
+    "matplotlib>=3.11.1",
+    "pytest>=9.0.3",
+    "reportlab>=5.0.1",
+]
+
+[project.scripts]
+eval = "harness_eval.__main__:main"

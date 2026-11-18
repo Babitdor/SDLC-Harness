@@ -1,0 +1,45 @@
+# Postgres for conversation + message persistence (replaces frontend
+# localStorage). The backend itself still runs on the host so it can
+# create per-thread Docker containers without a docker-in-docker setup;
+# only the database is containerised here.
+#
+# Usage:
+#   docker compose up -d                # start postgres in the background
+#   docker compose logs -f postgres     # tail logs
+#   docker compose down                 # stop (data persists in the named volume)
+#   docker compose down -v              # stop and wipe the database
+#
+# After `up`, the backend (run from backend/ on the host) will connect to
+# postgres://harness:harness@localhost:5432/harness via the DATABASE_URL
+# in backend/.env — see DATABASE_URL in sdlc/core/config.py.
+
+name: sdlc-harness-db
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: sdlc-harness-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: harness
+      POSTGRES_USER: harness
+      POSTGRES_PASSWORD: harness
+      # Faster checksums + UTC by default.
+      POSTGRES_INITDB_ARGS: "--data-checksums"
+      PGTZ: "UTC"
+    ports:
+      # Exposed on localhost so the host-run backend can reach it.
+      # Change to "127.0.0.1:5432:5432" if you want to bind explicitly to
+      # loopback (recommended once you put real data in it).
+      - "5432:5432"
+    volumes:
+      - sdlc_harness_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U harness -d harness"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  sdlc_harness_pgdata:
+    name: sdlc_harness_pgdata

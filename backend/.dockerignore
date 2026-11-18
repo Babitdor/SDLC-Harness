@@ -1,0 +1,60 @@
+# ── Backend .dockerignore ───────────────────────────────────────────────
+#
+# Anything here is excluded from the build context (NOT just the final
+# image). Smaller context = faster builds + smaller layer hashes = better
+# cache hit rate on every code change.
+
+# Python build artefacts
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.egg
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.coverage
+htmlcov/
+
+# Virtualenvs (host-only)
+.venv/
+env/
+venv/
+.python-version
+
+# Local runtime state — mounted as named volumes in compose; baking it
+# into the image would also bake stale chat history into every rebuild.
+data/
+uploads/
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+
+# Trace / planning artefacts from local dev runs — large and irrelevant
+# to the running backend.
+.nova/
+.planning/
+
+# IDE / editor metadata
+.vscode/
+.idea/
+*.swp
+
+# Git
+.git/
+.gitignore
+
+# Env files — secrets stay out of the build context. `.env` lives on the
+# host and is mounted via `env_file:` in compose.
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+
+# OS junk
+.DS_Store
+Thumbs.db

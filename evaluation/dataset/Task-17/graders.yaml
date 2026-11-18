@@ -1,0 +1,17 @@
+# Task-17 grader bindings.
+#
+# The harness evaluation is scoped to measurement only:
+#   1. Cost and token consumption      -> cost-tokens
+#   2. Internal reasoning and process  -> process-metrics
+#      (reasoning tokens, LLM invocation count, subagent dispatches, elapsed)
+#
+# Artefact-quality graders (SysML validity, requirements quality, traceability,
+# layout, etc.) are intentionally not bound: the evaluation measures what the
+# harness consumes and how it is shaped, not the quality of the model produced.
+
+project_id: task17-medical-infusion
+prompt: task.md
+
+graders:
+  - name: cost-tokens                        # tokens, cached tokens, $ estimate
+  - name: process-metrics                    # reasoning tokens, LLM invocations, subagent dispatches

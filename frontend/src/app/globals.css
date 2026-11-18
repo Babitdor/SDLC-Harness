@@ -1,0 +1,453 @@
+@import "tailwindcss";
+
+@theme {
+  /* ── Ink ─────────────────────────────────────────────────────
+     Deep ink-grey engineering palette, faintly green-cast.
+     Cooler than paper, warmer than pure black. — reads as precise and technical. */
+  --color-base-950: #0b0e0d;
+  --color-base-900: #121615;
+  --color-base-800: #191d1c;
+  --color-base-700: #262b29;
+  --color-base-600: #39403d;
+  --color-base-500: #78827c;
+  --color-base-400: #8a938e;
+  --color-base-300: #b2bab5;
+  --color-base-200: #d5dcd7;
+  --color-base-100: #eff3f0;
+
+  /* ── Accent ramp ────────────────────────────────────────────────────
+     Copper markup ink. Active state, primary buttons,
+     focus rings, artifact links. Warm and deliberate — reads as "interactive". */
+  --color-blue-300: #e8a878;
+  --color-blue-400: #d2854e;
+  --color-blue-500: #ad6231;
+  --color-blue-600: #85471f;
+  --color-blue-700: #5f3215;
+
+  /* ── Signal teal ────────────────────────────────────────────────────
+     Secondary signal. Agent activity, status marks that
+     badges that need to read as "neutral correct". */
+  --color-cyan-300: #7fbdb2;
+  --color-cyan-400: #5c9d92;
+  --color-cyan-500: #457a72;
+  --color-cyan-600: #335c56;
+  --color-cyan-700: #24423e;
+
+  /* ── Semantic ───────────────────────────────────────────────────────
+     Muted green and brick for success/error. Data, not decoration. */
+  --color-success: #4f9d6a;
+  --color-danger: #cf6152;
+  --color-danger-400: #e08175;
+  --color-info: #d2854e;
+
+  /* ── Fonts ───────────────────────────────────────────────────────────
+     Three faces, all self-hosted by next/font in layout.tsx:
+       Newsreader   — display only. Headings read as a signed
+                      specification, not a chat app.
+       Geist        — body and UI text.
+       JetBrains    — identifiers, phase codes, artifact names,
+                      token counts. Tabular by default (see below).
+     These vars alias the next/font variables; nothing loads at runtime. */
+  --font-display: var(--font-newsreader), Georgia, 'Times New Roman', serif;
+  --font-body: var(--font-geist), system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-jetbrains), 'SF Mono', 'Cascadia Code', monospace;
+}
+
+/* ── Light mode overrides ──────────────────────────────────────────── */
+html:not(.dark) {
+  --color-base-950: #faf7f0;
+  --color-base-900: #f3efe5;
+  --color-base-800: #e9e3d6;
+  --color-base-700: #d7cfbe;
+  --color-base-600: #b6ad9b;
+  --color-base-500: #6f6858;
+  --color-base-400: #5c5546;
+  --color-base-300: #423c31;
+  --color-base-200: #2a251d;
+  --color-base-100: #14110c;
+
+  --color-blue-300: #b45a22;
+  --color-blue-400: #93481a;
+  --color-blue-500: #743713;
+  --color-blue-600: #572a0e;
+  --color-blue-700: #3d1d09;
+
+  --color-cyan-300: #2f6f66;
+  --color-cyan-400: #245952;
+  --color-cyan-500: #1b443f;
+  --color-cyan-600: #13312d;
+  --color-cyan-700: #0c221f;
+
+  --color-success: #2c6b45;
+  --color-danger: #a53a2c;
+  --color-danger-400: #8a2b1f;
+  --color-info: #93481a;
+}
+
+/* ── Base ──────────────────────────────────────────────────────────── */
+html {
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 400ms ease-out, color 400ms ease-out,
+              border-color 400ms ease-out, box-shadow 400ms ease-out;
+}
+
+body {
+  background: var(--color-base-950);
+  color: var(--color-base-200);
+}
+
+/* ── Font utilities ────────────────────────────────────────────────── */
+.font-display { font-family: var(--font-display); font-weight: 500; letter-spacing: -0.012em; }
+.font-body { font-family: var(--font-body); }
+.font-mono { font-family: var(--font-mono); }
+
+/* ── Hairline rule ──────────────────────────────────────────────────────
+   1px rule with neutral tint. Reusable across the whole app. */
+.rule { border-color: var(--color-base-700); }
+.rule-strong { border-color: var(--color-base-600); }
+
+/* ── Label mono ─────────────────────────────────────────────────────────
+   Uppercase, letter-spaced mono label. Used for section headers,
+   status indicators, metadata. */
+.label-mono {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--color-base-400);
+}
+
+/* ── Corner ticks ───────────────────────────────────────────────────────
+   Drafting-plate corner accents. `tick-corners` draws two ticks (top-left
+   + bottom-right); `tick-corners-4` draws all four. Used on primary
+   buttons, dropdown panels, and emphasis blocks to give them a precise,
+   instrument-like edge instead of a plain border. The accent uses the cool
+   blue (not the old warm amber) to match the current slate/blue theme.
+   NOTE: these set `position: relative`, so they must live on a separate
+   node from any Tailwind `absolute` positioning (see MentionDropdown). */
+.tick-corners {
+  position: relative;
+}
+.tick-corners::before,
+.tick-corners::after {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-color: rgba(88, 166, 255, 0.5); /* --color-blue-300 at 50% */
+  pointer-events: none;
+}
+.tick-corners::before {
+  top: -1px; left: -1px;
+  border-top: 1px solid;
+  border-left: 1px solid;
+}
+.tick-corners::after {
+  bottom: -1px; right: -1px;
+  border-bottom: 1px solid;
+  border-right: 1px solid;
+}
+
+/* Full four-corner ticks variant — for heavy emphasis blocks like tool
+   call results. Separate utility because pseudo-elements are limited to
+   two per node. */
+.tick-corners-4 {
+  position: relative;
+}
+.tick-corners-4::before,
+.tick-corners-4::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  pointer-events: none;
+  background:
+    linear-gradient(to right, rgba(88, 166, 255, 0.55) 10px, transparent 10px) top left / 11px 1px no-repeat,
+    linear-gradient(to bottom, rgba(88, 166, 255, 0.55) 10px, transparent 10px) top left / 1px 11px no-repeat,
+    linear-gradient(to left, rgba(88, 166, 255, 0.55) 10px, transparent 10px) top right / 11px 1px no-repeat,
+    linear-gradient(to bottom, rgba(88, 166, 255, 0.55) 10px, transparent 10px) top right / 1px 11px no-repeat,
+    linear-gradient(to right, rgba(88, 166, 255, 0.55) 10px, transparent 10px) bottom left / 11px 1px no-repeat,
+    linear-gradient(to top, rgba(88, 166, 255, 0.55) 10px, transparent 10px) bottom left / 1px 11px no-repeat,
+    linear-gradient(to left, rgba(88, 166, 255, 0.55) 10px, transparent 10px) bottom right / 11px 1px no-repeat,
+    linear-gradient(to top, rgba(88, 166, 255, 0.55) 10px, transparent 10px) bottom right / 1px 11px no-repeat;
+}
+.tick-corners-4::after { display: none; } /* second pseudo unused; reserve for animation hook */
+
+/* ── Pulse animations ─────────────────────────────────────────────────── */
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+.animate-pulse-glow { animation: pulse-glow 2.8s ease-in-out infinite; }
+
+@keyframes pulse-slow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+.animate-pulse-slow { animation: pulse-slow 3.4s ease-in-out infinite; }
+
+/* ── Staggered message entrance ───────────────────────────────────────── */
+@keyframes message-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-message-in {
+  animation: message-in 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+}
+
+/* ── Typing dots ───────────────────────────────────────────────────────── */
+@keyframes typing-bounce {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+  30% { transform: translateY(-4px); opacity: 1; }
+}
+.typing-dot { animation: typing-bounce 1.4s ease-in-out infinite; }
+.typing-dot:nth-child(2) { animation-delay: 0.18s; }
+.typing-dot:nth-child(3) { animation-delay: 0.36s; }
+
+/* ── Scrollbars ─────────────────────────────────────────────────────────
+   Slim, neutral, squared-off. */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--color-base-700);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--color-base-600); }
+
+/* ── Selection ─────────────────────────────────────────────────────────── */
+::selection {
+  background: rgba(88, 166, 255, 0.3);
+  color: var(--color-base-100);
+}
+
+/* ── Focus ring ────────────────────────────────────────────────────────── */
+*:focus-visible {
+  outline: 1px solid var(--color-blue-400);
+  outline-offset: 2px;
+}
+
+/* ── Code blocks ───────────────────────────────────────────────────────── */
+pre > code {
+  font-family: var(--font-mono) !important;
+}
+
+/* ── Panel surfaces ────────────────────────────────────────────────────── */
+.panel {
+  background: var(--color-base-900);
+  border: 1px solid var(--color-base-700);
+}
+.panel-header {
+  border-bottom: 1px solid var(--color-base-700);
+  background: var(--color-base-800);
+}
+
+/* ── Resize handles (react-resizable-panels) ──────────────────────────
+   3px hairline divider between resizable panels. */
+.harness-resize-handle {
+  width: 3px;
+  background-color: var(--color-base-700);
+  transition: background-color 150ms ease-out;
+  cursor: col-resize;
+  position: relative;
+}
+.harness-resize-handle:hover,
+.harness-resize-handle[data-resize-handle-state="hover"] {
+  background-color: var(--color-base-500);
+}
+.harness-resize-handle[data-resize-handle-state="drag"] {
+  background-color: var(--color-blue-400);
+}
+.harness-resize-handle::before {
+  content: "";
+  position: absolute;
+  inset: 0 -3px;
+}
+
+/* ── Letter-spacing utilities for mono labels ─────────────────────────── */
+.tracking-wider-mono { letter-spacing: 0.12em; }
+.tracking-widest-mono { letter-spacing: 0.18em; }
+
+/* ── Tabular figures ───────────────────────────────────────────────────
+   Token counts, costs, durations and file sizes all re-render in place
+   while streaming. Proportional digits made those columns jitter on
+   every update; lining tabular figures keep them column-stable. */
+.font-mono,
+pre,
+code,
+.label-mono,
+[class*="tabular"] {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* ── Text wrapping ─────────────────────────────────────────────────────
+   `balance` evens out short headings (kills one-word last lines);
+   `pretty` handles orphans in long-form assistant prose. */
+h1, h2, h3, h4 {
+  text-wrap: balance;
+}
+p, li {
+  text-wrap: pretty;
+}
+
+/* ── Skip link ─────────────────────────────────────────────────────────
+   Keyboard users land on the sidebar's full conversation list before
+   reaching the transcript. Hidden until focused. */
+.skip-link {
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  z-index: 100;
+  padding: 8px 14px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-base-100);
+  background: var(--color-base-900);
+  border: 1px solid var(--color-blue-400);
+  transform: translateY(calc(-100% - 12px));
+  transition: transform 180ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+/* ── Reduced motion ────────────────────────────────────────────────────
+   The transcript animates constantly (message entrance, typing dots,
+   status pulses). Honour the OS setting instead of overriding it. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Status indicators are exempt. The rule above is for decorative motion;
+     applied to these it freezes the spinners, the streaming dots and the
+     WORKING pulse, so a live agent run renders identically to an idle one.
+     That is not a reduced-motion preference being honoured, it is the UI
+     reporting the wrong state.
+
+     WCAG 2.3.3 scopes reduced motion to non-essential animation, and these
+     are small-amplitude rotation/opacity loops rather than the large
+     positional movement that triggers vestibular symptoms. Only the
+     duration and iteration count are restored, so the keyframes stay
+     wherever they were defined. */
+  .animate-spin {
+    animation-duration: 1s !important;
+    animation-iteration-count: infinite !important;
+  }
+  .animate-pulse {
+    animation-duration: 2s !important;
+    animation-iteration-count: infinite !important;
+  }
+  .animate-pulse-glow {
+    animation-duration: 2.8s !important;
+    animation-iteration-count: infinite !important;
+  }
+  .animate-pulse-slow {
+    animation-duration: 3.4s !important;
+    animation-iteration-count: infinite !important;
+  }
+  .typing-dot {
+    animation-duration: 1.4s !important;
+    animation-iteration-count: infinite !important;
+  }
+}
+/* ── Phase identity ─────────────────────────────────────────────────────
+   Five phases, five low-saturation hues. Colour here is categorical data
+   (which phase an agent owns), so it is allowed to outnumber the single
+   accent: it shows up only as a 2px tick, a phase code or a dotted rule —
+   never as a filled surface competing with the copper. */
+:root {
+  --phase-1: #5f8fa8;
+  --phase-2: #7d9b6b;
+  --phase-3: #b08a4e;
+  --phase-4: #96709a;
+  --phase-5: #5c9a94;
+}
+html:not(.dark) {
+  --phase-1: #3f6d86;
+  --phase-2: #567044;
+  --phase-3: #8a6526;
+  --phase-4: #6d4b72;
+  --phase-5: #35706a;
+}
+[data-phase='1'] { --phase: var(--phase-1); }
+[data-phase='2'] { --phase: var(--phase-2); }
+[data-phase='3'] { --phase: var(--phase-3); }
+[data-phase='4'] { --phase: var(--phase-4); }
+[data-phase='5'] { --phase: var(--phase-5); }
+
+/* 2px category tick, sits in a register row gutter. */
+.phase-tick {
+  display: inline-block;
+  width: 2px;
+  align-self: stretch;
+  background: var(--phase, var(--color-base-600));
+}
+
+/* Phase code — "P2" in mono, tinted by phase. */
+.phase-code {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  font-variant-numeric: tabular-nums;
+  color: var(--phase, var(--color-base-400));
+}
+
+/* ── Register ──────────────────────────────────────────────────────────
+   The dossier core: one row per phase. Grid, not flex, so the agent and
+   artifact columns stay aligned however long the names get. Hairlines
+   only — the paper carries the structure. */
+.register { border-top: 1px solid var(--color-base-700); }
+.register-row {
+  display: grid;
+  grid-template-columns: 2.5rem 1fr;
+  gap: 0 1rem;
+  padding: 0.7rem 0.75rem 0.7rem 0;
+  border-bottom: 1px solid var(--color-base-700);
+  transition: background-color 160ms ease-out;
+}
+.register-row:hover { background: var(--color-base-900); }
+
+/* ── Gate badge ────────────────────────────────────────────────────────
+   Status reads as a release stamp, not a coloured dot: mono, cut corner,
+   square by intent. Nothing else in this UI is a pill. */
+.gate-badge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 3px 9px 3px 8px;
+  border: 1px solid currentColor;
+  clip-path: polygon(0 0, calc(100% - 7px) 0, 100% 7px, 100% 100%, 0 100%);
+}
+
+/* ── Paper grain ───────────────────────────────────────────────────────
+   One 1px-on-3px lattice at ~5% alpha. Stops large empty areas reading as
+   flat vector fill without ever resolving into a visible pattern. */
+.paper-grain {
+  background-image:
+    repeating-linear-gradient(0deg, rgba(140, 140, 140, 0.045) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(90deg, rgba(140, 140, 140, 0.045) 0 1px, transparent 1px 3px);
+}
+html:not(.dark) .paper-grain {
+  background-image:
+    repeating-linear-gradient(0deg, rgba(92, 82, 62, 0.05) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(90deg, rgba(92, 82, 62, 0.05) 0 1px, transparent 1px 3px);
+}
+
+/* Display serif for section titles; optical sizing keeps it from thinning. */
+.dossier-title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.014em;
+  font-optical-sizing: auto;
+}
+

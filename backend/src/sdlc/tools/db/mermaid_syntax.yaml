@@ -1,0 +1,158 @@
+# Mermaid syntax reference — looked up by MermaidSyntaxTool.
+# Keys are canonical diagram/construct names; construct_map maps the aliases a
+# model is likely to type onto those keys.
+
+construct_map:
+  seq: sequenceDiagram
+  sequence: sequenceDiagram
+  sequencediagram: sequenceDiagram
+  class: classDiagram
+  classdiagram: classDiagram
+  state: stateDiagram-v2
+  state machine: stateDiagram-v2
+  statemachine: stateDiagram-v2
+  statediagram: stateDiagram-v2
+  er: erDiagram
+  erd: erDiagram
+  entity relationship: erDiagram
+  entityrelationshipdiagram: erDiagram
+  deployment: deployment
+  flowchart: flowchart
+  graph: flowchart
+  subgraph: subgraph
+  cardinality: cardinality
+  state transition: stateTransition
+  statetransition: stateTransition
+  participant: participant
+
+syntax:
+  sequenceDiagram: |
+    sequenceDiagram
+        autonumber
+        actor User
+        participant API
+        User->>API: POST /orders
+        API-->>User: 201 Created
+
+    Rules:
+    - First line is exactly `sequenceDiagram`.
+    - Declare every participant with `actor Name` or `participant Name` before use.
+    - Message arrows: `->>` request, `-->>` response, `-x` lost message.
+    - Every arrow carries a label after `:`.
+    - `autonumber` numbers the messages; it is optional.
+
+  classDiagram: |
+    classDiagram
+        class Order {
+            +String id
+            +place() bool
+        }
+        class LineItem {
+            +String sku
+        }
+        Order "1" --> "*" LineItem : contains
+
+    Rules:
+    - First line is exactly `classDiagram`.
+    - Members live inside the `class Name { ... }` block, one per line.
+    - Visibility prefixes: `+` public, `-` private, `#` protected, `~` package.
+    - Relationship cardinality is quoted: `"1"`, `"*"`, `"0..1"`.
+    - Every relationship has a label after `:`.
+    - Close every class block with `}` or the parser fails.
+
+  stateDiagram-v2: |
+    stateDiagram-v2
+        [*] --> Draft
+        Draft --> Submitted : submit
+        Submitted --> Rejected : reject
+        Submitted --> [*] : approve
+
+    Rules:
+    - First line is exactly `stateDiagram-v2` (`stateDiagram` is the v1 form).
+    - `[*]` is the initial or final pseudo-state; its transition needs no label.
+    - Every other transition carries a label after `:`.
+    - Every non-initial state must be reachable from `[*]`.
+    - Composite states use `state Name { ... }` and must be closed.
+
+  erDiagram: |
+    erDiagram
+        CUSTOMER ||--o{ ORDER : places
+        ORDER ||--|{ LINE_ITEM : contains
+
+    Rules:
+    - First line is exactly `erDiagram`.
+    - Cardinality tokens: `||--o{` one-to-many, `||--|{` one-to-one-or-more,
+      `}o--||` many-to-one, `|o--||` zero-or-one-to-one, `||--||` one-to-one.
+    - Every relationship carries a label after `:`.
+    - Entity names are conventionally UPPER_SNAKE to match the data model table names.
+    - Attribute blocks use `ENTITY { type name }` and must be closed.
+
+  deployment: |
+    flowchart LR
+        subgraph edge[Edge]
+            LB[Load balancer]
+        end
+        subgraph app[Application]
+            API[API service]
+        end
+        LB -->|HTTPS| API
+
+    Rules:
+    - Mermaid has no native deployment diagram: use `flowchart LR` and one
+      `subgraph` per deployment node.
+    - Every subgraph declares a display label: `subgraph id[Label]`.
+    - Every subgraph is closed with `end` on its own line.
+    - Every edge is labelled with the protocol: `A -->|HTTPS| B`.
+
+  flowchart: |
+    flowchart LR
+        A[Start] --> B{Decision}
+        B -->|yes| C[Done]
+        B -->|no| A
+
+    Rules:
+    - Header is `flowchart <direction>` or `graph <direction>`
+      (direction: TB, TD, BT, RL, LR).
+    - Node shapes: `[rect]`, `(round)`, `{diamond}`, `((circle))`.
+    - Edge labels go between pipes: `-->|label|`.
+    - Every `subgraph` is closed with `end`.
+
+  subgraph: |
+    subgraph group[Display label]
+        N1[Node one]
+    end
+
+    Rules:
+    - The label in square brackets is what the reader sees; the prefix is the id.
+    - One `end` closes exactly one `subgraph`.
+    - Subgraphs may nest, but each nesting level needs its own `end`.
+
+  cardinality: |
+    | Token   | Meaning                  |
+    |---------|--------------------------|
+    | ||--||   | exactly one to exactly one |
+    | ||--o{   | one to zero-or-more      |
+    | ||--|{   | one to one-or-more       |
+    | }o--||   | zero-or-more to one      |
+    | |o--||   | zero-or-one to one       |
+
+    Used only in `erDiagram` relationship lines: `A <token> B : label`.
+
+  stateTransition: |
+    StateA --> StateB : event
+
+    Rules:
+    - The label after `:` is the event that causes the transition.
+    - A transition with no event is a parse error in state diagrams,
+      except where one side is `[*]`.
+
+  participant: |
+    actor User
+    participant API
+    participant Service as "Order service"
+
+    Rules:
+    - Declared once, before the first message that uses it.
+    - `as "Display name"` renames the participant in the rendered diagram.
+    - `actor` renders a person icon; `participant` renders a box.
+

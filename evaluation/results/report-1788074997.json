@@ -1,0 +1,149 @@
+{
+  "suite": "dataset/eval_dataset/MBSEEvals",
+  "trials": 1,
+  "tasks": [
+    {
+      "task": "Task-1",
+      "project_id": "task1-warehouse",
+      "trials": [
+        {
+          "trial": 0,
+          "thread_id": "task1-warehouse-t0-98496468",
+          "elapsed_s": 29.7,
+          "pipeline_error": null,
+          "graders": {
+            "requirements-quality": {
+              "score": 0,
+              "comment": "No content found for requirements/REQUIREMENTS.md in artifact_contents."
+            },
+            "box-quality": {
+              "score": 0,
+              "comment": "BOX.md not produced"
+            },
+            "rules-quality": {
+              "score": 0,
+              "comment": "RULES.md not produced"
+            },
+            "principle-solutions-quality": {
+              "score": 0,
+              "comment": "PRINCIPLE_SOLUTIONS.md not produced"
+            },
+            "use-case-quality": {
+              "score": 0,
+              "comment": "USECASES.md not produced"
+            },
+            "activity-quality": {
+              "score": 0,
+              "comment": "ACTIVITIES.md not produced"
+            },
+            "function-tree-quality": {
+              "score": 0,
+              "comment": "FUNCTION_TREE.md not produced"
+            },
+            "sysml-validity": {
+              "score": 0,
+              "comment": "No .sysml files found in run output (expected under outputs['artifact_contents'])."
+            },
+            "defect-density": {
+              "score": 0,
+              "comment": "No .sysml files produced"
+            },
+            "sysml-cross-model-consistency": {
+              "score": 0,
+              "comment": "No .sysml files produced"
+            },
+            "sankey-validity": {
+              "score": 0,
+              "comment": "sankey.html not produced"
+            },
+            "layout-validity": {
+              "score": 0,
+              "comment": "Layout validity violations: Layout validity: physical/layout/layout_v1.json not produced; Floorplan validity: physical/floorplan.drawio not produced"
+            },
+            "traceability-chain": {
+              "score": 1,
+              "comment": "All traceability links resolve: Requirements \u2190 Use Cases \u2190 Activities, and BDD \u2192 SysML / IBD / Layout \u2192 Floorplan are consistent."
+            },
+            "orphan-element-ratio": {
+              "score": 0,
+              "comment": "No .sysml files produced"
+            },
+            "cost-tokens": {
+              "score": 1.0,
+              "comment": "total=0 (in=0, out=0); cost=$0.0000; calls=0; (fallback price)",
+              "extra": {
+                "usage": {
+                  "input_tokens": 0,
+                  "output_tokens": 0,
+                  "total_tokens": 0,
+                  "cached_tokens": 0,
+                  "calls": 0,
+                  "model": null,
+                  "max_input_tokens_per_call": 0,
+                  "p95_input_tokens_per_call": 0
+                },
+                "cost_usd": 0.0,
+                "input_price": 1.0,
+                "output_price": 3.0,
+                "used_fallback_price": true,
+                "budget": {
+                  "max_cost_usd": 1.0,
+                  "max_total_tokens": 1500000
+                },
+                "elapsed_s": 14.04
+              }
+            },
+            "process-metrics": {
+              "score": 1.0,
+              "comment": "llm_invocations=0; subagents=0 (0 kinds); reasoning_tokens=0; elapsed=14.0s",
+              "extra": {
+                "usage": {
+                  "input_tokens": 0,
+                  "output_tokens": 0,
+                  "total_tokens": 0,
+                  "reasoning_tokens": 0,
+                  "calls": 0,
+                  "invocations": 0,
+                  "model": null
+                },
+                "process": {
+                  "subagent_calls": {},
+                  "agents_involved": [],
+                  "llm_invocations": 0,
+                  "elapsed_s": 14.04
+                },
+                "budget": {
+                  "max_llm_invocations": 200,
+                  "max_subagents": 30,
+                  "max_elapsed_s": 1800.0
+                }
+              }
+            }
+          }
+        }
+      ],
+      "mean_scores": {
+        "requirements-quality": 0.0,
+        "box-quality": 0.0,
+        "rules-quality": 0.0,
+        "principle-solutions-quality": 0.0,
+        "use-case-quality": 0.0,
+        "activity-quality": 0.0,
+        "function-tree-quality": 0.0,
+        "sysml-validity": 0.0,
+        "defect-density": 0.0,
+        "sysml-cross-model-consistency": 0.0,
+        "sankey-validity": 0.0,
+        "layout-validity": 0.0,
+        "traceability-chain": 1.0,
+        "orphan-element-ratio": 0.0,
+        "cost-tokens": 1.0,
+        "process-metrics": 1.0
+      }
+    }
+  ],
+  "summary": {
+    "tasks": 1,
+    "overall_mean_score": 0.1875
+  }
+}

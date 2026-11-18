@@ -1,0 +1,91 @@
+{
+  "suite": "dataset/eval_dataset/MBSEEvals",
+  "trials": 1,
+  "tasks": [
+    {
+      "task": "Task-23",
+      "project_id": "task23-ev-charging-point",
+      "trials": [
+        {
+          "trial": 0,
+          "thread_id": "task23-ev-charging-point-t0-0a166ce6",
+          "elapsed_s": 465.5,
+          "pipeline_error": null,
+          "graders": {
+            "cost-tokens": {
+              "score": 1.0,
+              "comment": "total=1297632 (in=1227268, out=70364); cost=$0.3164; calls=74; model=deepseek-v4-flash; max_in/call=31001",
+              "extra": {
+                "usage": {
+                  "input_tokens": 1227268,
+                  "output_tokens": 70364,
+                  "total_tokens": 1297632,
+                  "cached_tokens": 0,
+                  "calls": 74,
+                  "model": "deepseek-v4-flash",
+                  "max_input_tokens_per_call": 31001,
+                  "p95_input_tokens_per_call": 27793
+                },
+                "cost_usd": 0.316439,
+                "input_price": 0.22,
+                "output_price": 0.66,
+                "used_fallback_price": false,
+                "budget": {
+                  "max_cost_usd": 1.0,
+                  "max_total_tokens": 1500000
+                },
+                "elapsed_s": 431.12
+              }
+            },
+            "process-metrics": {
+              "score": 1.0,
+              "comment": "llm_invocations=74; subagents=6 (5 kinds); reasoning_tokens=0; elapsed=431.1s; model=deepseek-v4-flash",
+              "extra": {
+                "usage": {
+                  "input_tokens": 1227268,
+                  "output_tokens": 70364,
+                  "total_tokens": 1297632,
+                  "reasoning_tokens": 0,
+                  "calls": 74,
+                  "invocations": 74,
+                  "model": "deepseek-v4-flash"
+                },
+                "process": {
+                  "subagent_calls": {
+                    "ingestion": 1,
+                    "requirements": 1,
+                    "functional": 1,
+                    "logical": 1,
+                    "sysml": 2
+                  },
+                  "agents_involved": [
+                    "functional",
+                    "ingestion",
+                    "logical",
+                    "requirements",
+                    "sysml"
+                  ],
+                  "llm_invocations": 74,
+                  "elapsed_s": 431.12
+                },
+                "budget": {
+                  "max_llm_invocations": 200,
+                  "max_subagents": 30,
+                  "max_elapsed_s": 1800.0
+                }
+              }
+            }
+          }
+        }
+      ],
+      "mean_scores": {
+        "cost-tokens": 1.0,
+        "process-metrics": 1.0
+      }
+    }
+  ],
+  "summary": {
+    "tasks": 1,
+    "overall_mean_score": 1.0
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "suite": "dataset/eval_dataset/MBSEEvals",
+  "trials": 1,
+  "tasks": [
+    {
+      "task": "Task-24",
+      "project_id": "task24-hydrogen-station",
+      "trials": [
+        {
+          "trial": 0,
+          "thread_id": "task24-hydrogen-station-t0-c4410abe",
+          "elapsed_s": 1864.5,
+          "pipeline_error": null,
+          "graders": {
+            "cost-tokens": {
+              "score": 0.2277,
+              "comment": "total=6588961 (in=6224330, out=364631); cost=$1.6100; calls=199; model=deepseek-v4-flash; max_in/call=77959; OVER BUDGET",
+              "extra": {
+                "usage": {
+                  "input_tokens": 6224330,
+                  "output_tokens": 364631,
+                  "total_tokens": 6588961,
+                  "cached_tokens": 0,
+                  "calls": 199,
+                  "model": "deepseek-v4-flash",
+                  "max_input_tokens_per_call": 77959,
+                  "p95_input_tokens_per_call": 63228
+                },
+                "cost_usd": 1.610009,
+                "input_price": 0.22,
+                "output_price": 0.66,
+                "used_fallback_price": false,
+                "budget": {
+                  "max_cost_usd": 1.0,
+                  "max_total_tokens": 1500000
+                },
+                "elapsed_s": 1846.58
+              }
+            },
+            "process-metrics": {
+              "score": 0.0,
+              "comment": "llm_invocations=199; subagents=12 (8 kinds); reasoning_tokens=0; elapsed=1846.6s; model=deepseek-v4-flash; PROCESS OVER BUDGET",
+              "extra": {
+                "usage": {
+                  "input_tokens": 6224330,
+                  "output_tokens": 364631,
+                  "total_tokens": 6588961,
+                  "reasoning_tokens": 0,
+                  "calls": 199,
+                  "invocations": 199,
+                  "model": "deepseek-v4-flash"
+                },
+                "process": {
+                  "subagent_calls": {
+                    "ingestion": 1,
+                    "requirements": 1,
+                    "functional": 1,
+                    "logical": 1,
+                    "sysml": 5,
+                    "sankey": 1,
+                    "optimization": 1,
+                    "floorplan": 1
+                  },
+                  "agents_involved": [
+                    "floorplan",
+                    "functional",
+                    "ingestion",
+                    "logical",
+                    "optimization",
+                    "requirements",
+                    "sankey",
+                    "sysml"
+                  ],
+                  "llm_invocations": 199,
+                  "elapsed_s": 1846.58
+                },
+                "budget": {
+                  "max_llm_invocations": 200,
+                  "max_subagents": 30,
+                  "max_elapsed_s": 1800.0
+                }
+              }
+            }
+          }
+        }
+      ],
+      "mean_scores": {
+        "cost-tokens": 0.2277,
+        "process-metrics": 0.0
+      }
+    }
+  ],
+  "summary": {
+    "tasks": 1,
+    "overall_mean_score": 0.1139
+  }
+}

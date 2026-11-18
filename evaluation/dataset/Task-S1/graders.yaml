@@ -1,0 +1,10 @@
+# Task-S1 grader bindings.
+#
+# Measurement only: cost/tokens and process shape. No artefact-quality grader.
+
+project_id: task-s1-ticketing
+prompt: task.md
+
+graders:
+  - name: cost-tokens
+  - name: process-metrics

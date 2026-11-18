@@ -1,0 +1,112 @@
+# ── Python ────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+wheels/
+*.egg
+*.egg-info/
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Test / type-check caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# ── Node / Next.js ────────────────────────────────────────────────────
+node_modules/
+.next/
+out/
+.turbo/
+.swc/
+coverage/
+*.tsbuildinfo
+next-env.d.ts
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+*.log
+
+# ── Env files (NEVER commit credentials) ──────────────────────────────
+.env
+.env.local
+.env.*.local
+.env.*
+!.env.example
+
+# ── Runtime state / volumes ───────────────────────────────────────────
+# backend/data holds the LangGraph checkpoint DB (sqlite) and per-user
+# JSON state (custom_agents.json, syson_settings.json). All machine-local.
+backend/data/
+backend/uploads/
+*.sqlite
+*.sqlite-journal
+*.sqlite-wal
+*.sqlite-shm
+*.db
+
+# ── IDE ───────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ── OS ────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ── Misc ──────────────────────────────────────────────────────────────
+*.pem
+.vercel
+drawio-mcp/
+
+# Agentic OS data layer (session logs, transient state)
+data/
+
+# Claude and Agents
+.agents
+.claude#
+.nova
+skills-lock.json
+
+doc
+# ── Local run noise (not source) ──────────────────────────────────────
+# Playwright MCP page dumps and ad-hoc screenshots from debugging sessions.
+.playwright-mcp/
+*.png
+!frontend/public/**/*.png
+!assets/**/*.png
+
+# Generated evaluation output: figures rebuilt by gen_pdf_report.py and the
+# measure.py cost dumps. The report JSONs under evaluation/results/ ARE kept —
+# they are the record a report is generated from.
+evaluation/_art/
+evaluation/cost_report.*
+
+# Eval run logs (stdout/stderr of queued task-suite runs).
+evaluation/*.log
+evaluation/*.err
+
+# Pre-re-init history kept as a local backup; never part of the new repo.
+.git.backup-*/
+
+# Local-only trees: vendored landing assets + a skill-run Chrome profile,
+# agent session transcripts and tool dumps. Not project source.
+landing/
+large_tool_results/
+conversation_history/
+.serena/

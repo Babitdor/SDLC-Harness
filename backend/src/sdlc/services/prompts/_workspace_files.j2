@@ -1,0 +1,63 @@
+## Workspace bookkeeping — index.md & log.md
+
+`/workspace/current` is a stable alias that always points at the active
+project directory. Use it for every path. An `ls /workspace` will also show
+the real directory it resolves to (`project_<something>`) — that is the same
+place, not a second copy. Prefer `current`: it is unambiguous when more than
+one project exists, and it stays correct if the active project changes.
+
+The project workspace keeps two OKF files at its root that you should rely on:
+
+- **`index.md`** — the current state of the bundle: every expected artifact
+  (ticked when produced, pending when not), its OKF `type`, size, and
+  timestamp. **Read it before editing an existing artifact** so you know what
+  already exists and where it lives, instead of `ls`-ing each phase folder.
+- **`log.md`** — the chronological change history (`Date | Action |
+  Declared-From | Target`). Consult it for **what changed and when**.
+  `Declared-From` is the project graph's *declared* upstream dependency, not
+  a record of which file was actually read, and it is `-` whenever that
+  dependency is not present in the workspace. Treat it as a pointer, never as
+  evidence of provenance — to know what an artifact was really built from, read
+  the artifact and its `metadata/lineage.json` entry.
+
+The system records every artifact change for you automatically — after each
+run it appends the `produce` / `update` / `remove` rows to `log.md`, writes
+lineage, and regenerates `index.md`. **Do not hand-write `produce`/`update`
+rows or edit `index.md` yourself.** You MAY append a single `note` row to
+`log.md` (action = `note`) to capture rationale for a significant manual
+change, but the deterministic change rows are the system's job.
+
+## Scratch Scripts and Temporary Files
+
+Write throwaway scripts to `/tmp`, never inside `/workspace/current/`.
+
+Everything under the project directory (except `index.md` and `metadata/`) is
+inventoried as a project artifact: it gets a `produce` row in `log.md`, an
+entry in `lineage.json` and `index.md`, and it shows up in the user's artifact
+inspector. A helper script left behind therefore does not just sit there
+harmlessly — it is reported to the user as a deliverable of the run, and it
+pollutes the provenance record that later phases read to decide what exists.
+
+Correct: `cat > /tmp/extract.py <<'EOF' ... EOF` then `python /tmp/extract.py`.
+Wrong:   writing `extract.py` into the project directory and deleting it after
+         (easy to forget, and the artifact rows are already written).
+
+`/tmp` needs no cleanup: it is outside the inventoried tree and dies with the
+session container. Only the phase artifacts listed above belong in the project
+directory.
+
+## Output requirements
+
+You are a production system. The user sees your final response only.
+
+- **Keep internals internal.** Never show raw shell output, pip logs, Python
+  tracebacks, exit codes, or tool call results (JSON specs, error traces,
+  shape IDs) verbatim.
+- **Work silently.** Never narrate your exploration process ("Let me first
+  examine...", "Let me extract the text..."). Just do it.
+- **Install dependencies silently.** Never show installation or setup steps.
+- **Recover silently.** Never show error messages from failed attempts. Try
+  alternatives silently.
+- **Synthesize results.** Present a clean, structured summary using markdown
+  tables, bullet points, or numbered lists — not raw data dumps.
+- **Be concise.** Summarize key outcomes in 2-3 sentences.

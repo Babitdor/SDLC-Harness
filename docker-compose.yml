@@ -1,0 +1,169 @@
+# ── SDLC Harness — Docker Compose ──────────────────────────────────────
+#
+# Starts every service for the platform: shared Postgres, the FastAPI
+# backend and the Next.js frontend.
+#
+# Usage:
+#   docker compose up -d              # bring up the stack
+#   docker compose logs -f backend    # tail backend logs
+#   docker compose down               # stop (data + uploads persist)
+#   docker compose down -v            # stop and wipe every volume
+#
+# Service ports (host-bound):
+#   3000 — frontend (UI)
+#   8000 — backend API
+#   5432 — postgres (bound to 127.0.0.1 only — not exposed publicly)
+#
+# The database is auto-created on first start via
+# backend/database/init/01-harness.sql:
+#   harness — backend's conversations + messages (schema owned by Alembic)
+
+name: sdlc-harness
+
+services:
+  # ── Postgres — conversations + messages ─────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: sdlc-harness-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_INITDB_ARGS: "--data-checksums"
+      PGTZ: "UTC"
+    ports:
+      # Loopback-only — services on the sdlc-harness network reach this via
+      # the service name `postgres:5432`. Host access (psql, IDE) is
+      # available on 127.0.0.1:5432.
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - sdlc_harness_pgdata:/var/lib/postgresql/data
+      - ./backend/database/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 1G
+        reservations:
+          cpus: "0.25"
+          memory: 256M
+    networks:
+      - sdlc-harness
+
+  # ── Backend — SDLC orchestrator API ────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: sdlc-harness-backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./backend/.env
+    environment:
+      # Compose overrides — point host-relative env values at the
+      # in-network service names and container-internal paths.
+      DATABASE_URL: postgresql+asyncpg://postgres:password@postgres:5432/harness
+      CHECKPOINT_DB_PATH: /app/data/checkpoints.sqlite
+      UPLOAD_DIR_HOST: /app/uploads
+      # The backend uses the host Docker daemon (via the mounted socket)
+      # to spawn per-chat sandbox containers. Those containers are
+      # siblings of `sdlc-harness-backend`, not children — they're created
+      # against the host daemon directly.
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - sdlc_harness_backend_data:/app/data
+      - sdlc_harness_backend_uploads:/app/uploads
+      # Bind-mount the skills directory over the wheel's copy. Two reasons:
+      #   1. The diagram agent's Phase C self-improvement loop appends fix
+      #      patterns to /skills/<diagram>/LEARNED.md. The wheel-installed
+      #      copy is owned by root inside the image (uid 0), so the sdlc
+      #      user (uid 1001) can't write to it.
+      #   2. LEARNED.md and any tightened SKILL.md updates need to survive
+      #      `docker compose up --build` — bind-mounting puts the
+      #      authoritative copy on the host filesystem (under git).
+      - ./backend/src/sdlc/skills:/usr/local/lib/python3.12/site-packages/sdlc/skills
+    # The container runs as `sdlc` (uid 1001). The host's docker socket
+    # is bind-mounted into the container — on Docker Desktop (Linux VM)
+    # the socket is owned by root:root (gid 0), so we add gid 0 as a
+    # supplementary group at runtime to let the non-root user open it.
+    # On a Linux host where the socket is root:docker, replace "0" with
+    # the host's docker group GID (`stat -c '%g' /var/run/docker.sock`).
+    #
+    # Numeric `user:` skips supplementary groups defined in /etc/group,
+    # so the `docker` group set up in the Dockerfile alone isn't enough
+    # — group_add at the compose layer is the authoritative source.
+    user: "1001:1001"
+    group_add:
+      - "0"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 2G
+        reservations:
+          cpus: "0.5"
+          memory: 512M
+    healthcheck:
+      # `/health` returns 200 once Alembic migrations are done and the
+      # checkpointer is open. The frontend gates on this — see below.
+      # `python -c urllib.request` avoids needing curl in the image.
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request,sys; sys.exit(0) if urllib.request.urlopen('http://localhost:8000/health', timeout=3).status == 200 else sys.exit(1)"
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+    networks:
+      - sdlc-harness
+
+  # ── Frontend — Next.js chat UI ───────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: sdlc-harness-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    depends_on:
+      backend:
+        # Wait until the backend's /health returns 200 (migrations done,
+        # checkpointer open) so the first page load doesn't race against
+        # an in-flight `alembic upgrade head`.
+        condition: service_healthy
+    user: "1001:1001"
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 512M
+        reservations:
+          cpus: "0.1"
+          memory: 128M
+    networks:
+      - sdlc-harness
+
+networks:
+  sdlc-harness:
+    name: sdlc-harness
+
+volumes:
+  sdlc_harness_pgdata:
+    name: sdlc_harness_pgdata
+  sdlc_harness_backend_data:
+    name: sdlc_harness_backend_data
+  sdlc_harness_backend_uploads:
+    name: sdlc_harness_backend_uploads
